@@ -22,7 +22,7 @@
             padding: 0 16px;
         }
         
-        /* 极简顶部 */
+        /* 顶部导航 */
         .top-bar {
             display: flex;
             justify-content: space-between;
@@ -68,37 +68,6 @@
             border-radius: 30px;
         }
         
-        /* 搜索条 */
-        .search-box {
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 40px;
-            padding: 6px 6px 6px 18px;
-            display: flex;
-            align-items: center;
-            margin: 16px 0 24px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-        }
-        .search-box input {
-            flex: 1;
-            border: none;
-            outline: none;
-            font-size: 1rem;
-            padding: 8px 0;
-            min-width: 0;
-        }
-        .search-box button {
-            background: #0f4c75;
-            color: white;
-            border: none;
-            padding: 10px 24px;
-            border-radius: 40px;
-            font-size: 0.95rem;
-            font-weight: 500;
-            cursor: pointer;
-            white-space: nowrap;
-        }
-        
         /* 公告栏 */
         .announcement {
             background: #f0f7ff;
@@ -110,7 +79,82 @@
             color: #444;
         }
         
-        /* 主目录区 —— 改进点：默认折叠，点击展开 */
+        /* ===== 宣传条幅 (替代轮播图) ===== */
+        .promo-banner {
+            background: linear-gradient(145deg, #0b2a41 0%, #1a4b6d 100%);
+            border-radius: 20px;
+            padding: 24px 28px;
+            margin: 30px 0 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+            color: white;
+            box-shadow: 0 8px 20px rgba(0,30,50,0.15);
+            cursor: pointer;
+            transition: transform 0.2s;
+            border: 1px solid #30789c;
+        }
+        .promo-banner:hover {
+            transform: scale(1.01);
+        }
+        .promo-content {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+        .promo-icon {
+            font-size: 3rem;
+            background: rgba(255,255,255,0.15);
+            width: 70px;
+            height: 70px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .promo-text h3 {
+            font-size: 1.7rem;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+        .promo-text p {
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+        .promo-action {
+            background: white;
+            color: #0b2a41;
+            padding: 12px 28px;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border: none;
+            cursor: pointer;
+        }
+        .promo-action span {
+            font-size: 1.4rem;
+        }
+        @media (max-width: 600px) {
+            .promo-banner {
+                padding: 20px;
+            }
+            .promo-text h3 {
+                font-size: 1.3rem;
+            }
+            .promo-action {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* 资源目录区 */
         .section-header {
             display: flex;
             align-items: baseline;
@@ -138,7 +182,8 @@
             justify-content: space-between;
             padding-bottom: 8px;
             border-bottom: 2px solid #e0e8f0;
-            margin-bottom: 12px;
+            margin-bottom: 0;
+            transition: margin 0.2s;
         }
         .catalog-header h3 {
             font-size: 1.3rem;
@@ -153,12 +198,18 @@
             font-weight: 400;
             transition: transform 0.2s;
         }
+        /* 平滑折叠动画 */
         .subcat-list {
             list-style: none;
-            display: none;  /* 默认折叠 */
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s ease-out, margin 0.2s;
+            margin-top: 0;
         }
         .subcat-list.active {
-            display: block;
+            max-height: 600px;  /* 足够容纳内容 */
+            margin-top: 16px;
+            transition: max-height 0.45s ease-in;
         }
         .subcat-list li {
             margin-bottom: 14px;
@@ -169,14 +220,12 @@
             font-size: 0.95rem;
             margin-bottom: 6px;
         }
-        /* 改进点：链接在一行内显示，不换行，可左右滑动 */
         .link-list {
             display: flex;
             flex-wrap: nowrap;
             gap: 8px 12px;
             padding-left: 8px;
             overflow-x: auto;
-            overflow-y: visible;
             white-space: nowrap;
             -webkit-overflow-scrolling: touch;
             scrollbar-width: thin;
@@ -202,39 +251,77 @@
             border-bottom-color: #0f4c75;
         }
         
-        /* 知识库快速入口 */
-        .knowledge-teaser {
+        /* ===== 知识库 (二级类目+多篇文章) ===== */
+        .knowledge-section {
+            margin: 30px 0 40px;
+        }
+        .knowledge-categories {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
-            margin: 30px 0;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
         }
-        .teaser-item {
+        .knowledge-cat-card {
             background: white;
-            padding: 16px;
-            border-radius: 12px;
-            border: 1px solid #e0e8f0;
-            text-align: center;
-        }
-        .teaser-item .badge {
-            background: #3282b8;
-            color: white;
-            padding: 2px 10px;
             border-radius: 20px;
-            font-size: 0.7rem;
-            display: inline-block;
-            margin-bottom: 8px;
+            padding: 24px;
+            border: 1px solid #e0e8f0;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
         }
-        .teaser-item h4 {
-            font-size: 1.1rem;
-            margin-bottom: 6px;
+        .knowledge-cat-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 18px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #d0e2f0;
+            color: #0f3b5e;
         }
-        .teaser-item p {
-            font-size: 0.85rem;
-            color: #777;
+        .article-list {
+            list-style: none;
         }
-        
-        /* 核心服务专区 */
+        .article-item {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px dashed #e2e8f0;
+        }
+        .article-item:last-child {
+            border-bottom: none;
+        }
+        .article-title {
+            font-weight: 500;
+            color: #1e293b;
+        }
+        .article-link {
+            color: #0f4c75;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            background: #ecf3f9;
+            padding: 4px 12px;
+            border-radius: 30px;
+            transition: 0.15s;
+        }
+        .article-link:hover {
+            background: #0f4c75;
+            color: white;
+        }
+        .more-link {
+            margin-top: 16px;
+            text-align: right;
+        }
+        .more-link a {
+            color: #0f4c75;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        @media (max-width: 700px) {
+            .knowledge-categories {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 核心服务 */
         .service-section {
             background: linear-gradient(135deg, #f5f9ff, #ffffff);
             border-radius: 24px;
@@ -310,7 +397,14 @@
             width: 100%;
             margin-top: 20px;
         }
+        .form-note {
+            font-size: 0.8rem;
+            color: #888;
+            text-align: center;
+            margin-top: 16px;
+        }
         
+        /* 页脚+二维码 */
         .footer {
             text-align: center;
             padding: 32px 0 24px;
@@ -319,12 +413,31 @@
             margin-top: 30px;
             font-size: 0.85rem;
         }
+        .qrcode-section {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 24px 0 20px;
+            flex-wrap: wrap;
+        }
+        .qrcode-item {
+            text-align: center;
+        }
+        .qrcode-placeholder {
+            width: 120px;
+            height: 120px;
+            background: #eef2f6;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            border: 1px dashed #aaa;
+            color: #555;
+            font-size: 0.8rem;
+        }
         
-        /* 移动端适配改进 */
         @media (max-width: 900px) {
-            .knowledge-teaser {
-                grid-template-columns: repeat(2, 1fr);
-            }
             .service-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
@@ -334,14 +447,7 @@
                 flex-direction: column;
                 align-items: flex-start;
             }
-            .top-nav {
-                width: 100%;
-                justify-content: space-around;
-            }
             .main-catalog {
-                grid-template-columns: 1fr;
-            }
-            .knowledge-teaser {
                 grid-template-columns: 1fr;
             }
             .service-grid {
@@ -353,22 +459,12 @@
             .full-width {
                 grid-column: span 1;
             }
-            .catalog-header h3 {
-                font-size: 1.2rem;
-            }
-            .search-box button {
-                padding: 10px 16px;
-                font-size: 0.9rem;
-            }
-            .announcement {
-                font-size: 0.85rem;
-            }
         }
     </style>
 </head>
 <body>
 <div class="wrapper">
-    <!-- 极简顶部 -->
+    <!-- 导航 -->
     <div class="top-bar">
         <div>
             <span class="site-title"><span>🧬 生信加速器</span></span>
@@ -382,25 +478,18 @@
         </div>
     </div>
     
-    <!-- 搜索 -->
-    <div class="search-box">
-        <input type="text" placeholder="搜索生信工具、数据库、教程、服务……">
-        <button>🔍 搜索</button>
-    </div>
-    
     <!-- 公告 -->
     <div class="announcement">
-        <strong>📢 更新公告：</strong> 新增单细胞测序数据分析教程合集，收录10+实用数据库。我们的检测服务持续接单中，提供标准分析+高级可视化。
+        <strong>📢 更新公告：</strong> 所有资源链接已更新为官方网址，点击即可跳转。检测与分析服务持续接单中。
     </div>
     
-    <!-- 主目录 —— 阿虚风格核心（折叠展开版） -->
+    <!-- 资源全景目录 (完整6大类) -->
     <section id="catalog">
         <div class="section-header">
             <h2 style="font-size: 1.8rem; color: #1a1a2e;">📋 生信资源全景目录</h2>
             <span style="color:#888; font-size:0.9rem;">点击标题展开/折叠</span>
         </div>
-        <p style="color: #666; margin-bottom: 20px;">收录常用数据库、分析工具、教程资源，持续更新 · 免费使用</p>
-        
+        <p style="color: #666; margin-bottom: 20px;">收录常用数据库、分析工具、教程资源，持续更新 · 免费使用 · 一键直达</p>
         <div class="main-catalog">
             <!-- 大类1：测序技术 -->
             <div class="catalog-card">
@@ -409,79 +498,27 @@
                     <span class="toggle-icon">[+]</span>
                 </div>
                 <ul class="subcat-list">
-                    <li>
-                        <div class="subcat-title">高通量测序</div>
-                        <div class="link-list">
-                            <a href="#">Illumina</a> <a href="#">MGI</a> <a href="#">Ion Torrent</a> <a href="#">Element</a>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="subcat-title">单细胞测序</div>
-                        <div class="link-list">
-                            <a href="#">10x Genomics</a> <a href="#">Parse</a> <a href="#">BD Rhapsody</a> <a href="#">Smart-seq</a>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="subcat-title">单分子/三代测序</div>
-                        <div class="link-list">
-                            <a href="#">PacBio</a> <a href="#">Nanopore</a>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="subcat-title">空间转录组</div>
-                        <div class="link-list">
-                            <a href="#">10x Visium</a> <a href="#">NanoString</a> <a href="#">Stereo-seq</a> <a href="#">MERFISH</a>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="subcat-title">表观/其他</div>
-                        <div class="link-list">
-                            <a href="#">ATAC-seq</a> <a href="#">ChIP-seq</a> <a href="#">Hi-C</a> <a href="#">甲基化</a>
-                        </div>
-                    </li>
+                    <li><div class="subcat-title">高通量测序</div><div class="link-list"><a href="https://www.illumina.com/" target="_blank">Illumina</a> <a href="https://en.mgi-tech.com/" target="_blank">MGI</a> <a href="https://www.thermofisher.com/" target="_blank">Ion Torrent</a> <a href="https://www.elementbiosciences.com/" target="_blank">Element</a></div></li>
+                    <li><div class="subcat-title">单细胞测序</div><div class="link-list"><a href="https://www.10xgenomics.com/" target="_blank">10x Genomics</a> <a href="https://www.parsebiosciences.com/" target="_blank">Parse</a> <a href="https://www.bdbiosciences.com/en-us/products/instruments/single-cell-analysis" target="_blank">BD Rhapsody</a> <a href="https://www.illumina.com/science/sequencing-method-explorer/kits/smart-seq.html" target="_blank">Smart-seq</a></div></li>
+                    <li><div class="subcat-title">单分子/三代测序</div><div class="link-list"><a href="https://www.pacb.com/" target="_blank">PacBio</a> <a href="https://nanoporetech.com/" target="_blank">Nanopore</a></div></li>
+                    <li><div class="subcat-title">空间转录组</div><div class="link-list"><a href="https://www.10xgenomics.com/platforms/visium" target="_blank">10x Visium</a> <a href="https://nanostring.com/" target="_blank">NanoString</a> <a href="https://www.bgi.com/global/science-detail/stereo-seq-omics-series" target="_blank">Stereo-seq</a> <a href="https://vizgen.com/" target="_blank">MERFISH</a></div></li>
+                    <li><div class="subcat-title">表观/其他</div><div class="link-list"><a href="https://www.illumina.com/techniques/sequencing/dna-sequencing/atac-seq.html" target="_blank">ATAC-seq</a> <a href="https://www.encodeproject.org/chip-seq/" target="_blank">ChIP-seq</a> <a href="https://www.encodeproject.org/hi-c/" target="_blank">Hi-C</a> <a href="https://www.thermofisher.com/cn/zh/home/life-science/sequencing/methylation-analysis.html" target="_blank">甲基化</a></div></li>
                 </ul>
             </div>
-            
-            <!-- 大类2：数据库资源 -->
+            <!-- 大类2：公共数据库 -->
             <div class="catalog-card">
                 <div class="catalog-header">
                     <h3><span class="emoji">🗄️</span> 02 公共数据库</h3>
                     <span class="toggle-icon">[+]</span>
                 </div>
                 <ul class="subcat-list">
-                    <li>
-                        <div class="subcat-title">综合数据库</div>
-                        <div class="link-list">
-                            <a href="#">NCBI</a> <a href="#">EMBL-EBI</a> <a href="#">DDBJ</a> <a href="#">UCSC</a>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="subcat-title">基因表达</div>
-                        <div class="link-list">
-                            <a href="#">GEO</a> <a href="#">ArrayExpress</a> <a href="#">GTEx</a> <a href="#">SRA</a>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="subcat-title">肿瘤/疾病</div>
-                        <div class="link-list">
-                            <a href="#">TCGA</a> <a href="#">ICGC</a> <a href="#">cBioPortal</a> <a href="#">COSMIC</a>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="subcat-title">单细胞</div>
-                        <div class="link-list">
-                            <a href="#">HCA</a> <a href="#">PanglaoDB</a> <a href="#">Single Cell Portal</a> <a href="#">SCP</a>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="subcat-title">蛋白/互作</div>
-                        <div class="link-list">
-                            <a href="#">UniProt</a> <a href="#">STRING</a> <a href="#">BioGRID</a> <a href="#">PDB</a>
-                        </div>
-                    </li>
+                    <li><div class="subcat-title">综合数据库</div><div class="link-list"><a href="https://www.ncbi.nlm.nih.gov/" target="_blank">NCBI</a> <a href="https://www.ebi.ac.uk/" target="_blank">EMBL-EBI</a> <a href="https://www.ddbj.nig.ac.jp/" target="_blank">DDBJ</a> <a href="https://genome.ucsc.edu/" target="_blank">UCSC</a></div></li>
+                    <li><div class="subcat-title">基因表达</div><div class="link-list"><a href="https://www.ncbi.nlm.nih.gov/geo/" target="_blank">GEO</a> <a href="https://www.ebi.ac.uk/biostudies/arrayexpress" target="_blank">ArrayExpress</a> <a href="https://gtexportal.org/" target="_blank">GTEx</a> <a href="https://www.ncbi.nlm.nih.gov/sra/" target="_blank">SRA</a></div></li>
+                    <li><div class="subcat-title">肿瘤/疾病</div><div class="link-list"><a href="https://portal.gdc.cancer.gov/" target="_blank">TCGA</a> <a href="https://dcc.icgc.org/" target="_blank">ICGC</a> <a href="https://www.cbioportal.org/" target="_blank">cBioPortal</a> <a href="https://cancer.sanger.ac.uk/cosmic" target="_blank">COSMIC</a></div></li>
+                    <li><div class="subcat-title">单细胞</div><div class="link-list"><a href="https://www.humancellatlas.org/" target="_blank">HCA</a> <a href="https://panglaodb.se/" target="_blank">PanglaoDB</a> <a href="https://singlecell.broadinstitute.org/" target="_blank">Single Cell Portal</a> <a href="https://portals.broadinstitute.org/single_cell" target="_blank">SCP</a></div></li>
+                    <li><div class="subcat-title">蛋白/互作</div><div class="link-list"><a href="https://www.uniprot.org/" target="_blank">UniProt</a> <a href="https://string-db.org/" target="_blank">STRING</a> <a href="https://thebiogrid.org/" target="_blank">BioGRID</a> <a href="https://www.rcsb.org/" target="_blank">PDB</a></div></li>
                 </ul>
             </div>
-            
             <!-- 大类3：分析工具 -->
             <div class="catalog-card">
                 <div class="catalog-header">
@@ -489,39 +526,13 @@
                     <span class="toggle-icon">[+]</span>
                 </div>
                 <ul class="subcat-list">
-                    <li>
-                        <div class="subcat-title">RNA-seq分析</div>
-                        <div class="link-list">
-                            <a href="#">DESeq2</a> <a href="#">edgeR</a> <a href="#">limma</a> <a href="#">Salmon</a> <a href="#">Kallisto</a>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="subcat-title">单细胞分析</div>
-                        <div class="link-list">
-                            <a href="#">Seurat</a> <a href="#">Scanpy</a> <a href="#">Monocle</a> <a href="#">Cell Ranger</a>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="subcat-title">变异检测</div>
-                        <div class="link-list">
-                            <a href="#">GATK</a> <a href="#">Samtools</a> <a href="#">FreeBayes</a> <a href="#">DeepVariant</a>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="subcat-title">富集分析</div>
-                        <div class="link-list">
-                            <a href="#">clusterProfiler</a> <a href="#">DAVID</a> <a href="#">Metascape</a> <a href="#">GSEA</a>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="subcat-title">可视化</div>
-                        <div class="link-list">
-                            <a href="#">ggplot2</a> <a href="#">Plotly</a> <a href="#">IGV</a> <a href="#">UCSC Browser</a>
-                        </div>
-                    </li>
+                    <li><div class="subcat-title">RNA-seq分析</div><div class="link-list"><a href="https://bioconductor.org/packages/release/bioc/html/DESeq2.html" target="_blank">DESeq2</a> <a href="https://bioconductor.org/packages/release/bioc/html/edgeR.html" target="_blank">edgeR</a> <a href="https://bioconductor.org/packages/release/bioc/html/limma.html" target="_blank">limma</a> <a href="https://combine-lab.github.io/salmon/" target="_blank">Salmon</a> <a href="https://pachterlab.github.io/kallisto/" target="_blank">Kallisto</a></div></li>
+                    <li><div class="subcat-title">单细胞分析</div><div class="link-list"><a href="https://satijalab.org/seurat/" target="_blank">Seurat</a> <a href="https://scanpy.org/" target="_blank">Scanpy</a> <a href="https://cole-trapnell-lab.github.io/monocle3/" target="_blank">Monocle</a> <a href="https://www.10xgenomics.com/support/software/cell-ranger" target="_blank">Cell Ranger</a></div></li>
+                    <li><div class="subcat-title">变异检测</div><div class="link-list"><a href="https://gatk.broadinstitute.org/" target="_blank">GATK</a> <a href="http://samtools.sourceforge.net/" target="_blank">Samtools</a> <a href="https://github.com/freebayes/freebayes" target="_blank">FreeBayes</a> <a href="https://github.com/google/deepvariant" target="_blank">DeepVariant</a></div></li>
+                    <li><div class="subcat-title">富集分析</div><div class="link-list"><a href="https://bioconductor.org/packages/release/bioc/html/clusterProfiler.html" target="_blank">clusterProfiler</a> <a href="https://david.ncifcrf.gov/" target="_blank">DAVID</a> <a href="https://metascape.org/" target="_blank">Metascape</a> <a href="https://www.gsea-msigdb.org/" target="_blank">GSEA</a></div></li>
+                    <li><div class="subcat-title">可视化</div><div class="link-list"><a href="https://ggplot2.tidyverse.org/" target="_blank">ggplot2</a> <a href="https://plotly.com/" target="_blank">Plotly</a> <a href="https://igv.org/" target="_blank">IGV</a> <a href="https://genome.ucsc.edu/" target="_blank">UCSC Browser</a></div></li>
                 </ul>
             </div>
-            
             <!-- 大类4：学习资源 -->
             <div class="catalog-card">
                 <div class="catalog-header">
@@ -529,39 +540,13 @@
                     <span class="toggle-icon">[+]</span>
                 </div>
                 <ul class="subcat-list">
-                    <li>
-                        <div class="subcat-title">入门教程</div>
-                        <div class="link-list">
-                            <a href="#">Linux入门</a> <a href="#">R语言基础</a> <a href="#">Python入门</a> <a href="#">生信概览</a>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="subcat-title">进阶课程</div>
-                        <div class="link-list">
-                            <a href="#">Coursera</a> <a href="#">edX</a> <a href="#">Biostars</a> <a href="#">SeqAcademy</a>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="subcat-title">零代码平台</div>
-                        <div class="link-list">
-                            <a href="#">Galaxy</a> <a href="#">GenePattern</a> <a href="#">TBtools</a> <a href="#">Cytoscape</a>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="subcat-title">电子书/文档</div>
-                        <div class="link-list">
-                            <a href="#">Bioconductor</a> <a href="#">Bioinformatics Data Skills</a> <a href="#">生信技能树</a>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="subcat-title">视频教程</div>
-                        <div class="link-list">
-                            <a href="#">B站生信UP主</a> <a href="#">YouTube</a> <a href="#">腾讯课堂</a>
-                        </div>
-                    </li>
+                    <li><div class="subcat-title">入门教程</div><div class="link-list"><a href="https://linuxjourney.com/" target="_blank">Linux入门</a> <a href="https://www.r-project.org/" target="_blank">R语言基础</a> <a href="https://www.python.org/" target="_blank">Python入门</a> <a href="https://www.bioinformatics.org/" target="_blank">生信概览</a></div></li>
+                    <li><div class="subcat-title">进阶课程</div><div class="link-list"><a href="https://www.coursera.org/" target="_blank">Coursera</a> <a href="https://www.edx.org/" target="_blank">edX</a> <a href="https://www.biostars.org/" target="_blank">Biostars</a> <a href="http://www.seqacademy.org/" target="_blank">SeqAcademy</a></div></li>
+                    <li><div class="subcat-title">零代码平台</div><div class="link-list"><a href="https://usegalaxy.org/" target="_blank">Galaxy</a> <a href="https://www.genepattern.org/" target="_blank">GenePattern</a> <a href="https://github.com/CJ-Chen/TBtools/releases" target="_blank">TBtools</a> <a href="https://cytoscape.org/" target="_blank">Cytoscape</a></div></li>
+                    <li><div class="subcat-title">电子书/文档</div><div class="link-list"><a href="https://www.bioconductor.org/" target="_blank">Bioconductor</a> <a href="https://www.oreilly.com/library/view/bioinformatics-data-skills/9781449367480/" target="_blank">Bioinformatics Data Skills</a> <a href="https://vip.biotrainee.com/" target="_blank">生信技能树</a></div></li>
+                    <li><div class="subcat-title">视频教程</div><div class="link-list"><a href="https://www.bilibili.com/" target="_blank">B站生信UP主</a> <a href="https://www.youtube.com/" target="_blank">YouTube</a> <a href="https://ke.qq.com/" target="_blank">腾讯课堂</a></div></li>
                 </ul>
             </div>
-            
             <!-- 大类5：AI+生信 -->
             <div class="catalog-card">
                 <div class="catalog-header">
@@ -569,39 +554,13 @@
                     <span class="toggle-icon">[+]</span>
                 </div>
                 <ul class="subcat-list">
-                    <li>
-                        <div class="subcat-title">AI大模型</div>
-                        <div class="link-list">
-                            <a href="#">ChatGPT</a> <a href="#">DeepSeek</a> <a href="#">Claude</a> <a href="#">Gemini</a>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="subcat-title">生信专用AI</div>
-                        <div class="link-list">
-                            <a href="#">AlphaFold</a> <a href="#">ESMFold</a> <a href="#">BioBERT</a> <a href="#">DNABERT</a>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="subcat-title">AI辅助编程</div>
-                        <div class="link-list">
-                            <a href="#">GitHub Copilot</a> <a href="#">Cursor</a> <a href="#">Codeium</a>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="subcat-title">AI文献工具</div>
-                        <div class="link-list">
-                            <a href="#">Elicit</a> <a href="#">Scite</a> <a href="#">Connected Papers</a> <a href="#">Research Rabbit</a>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="subcat-title">AI绘图/写作</div>
-                        <div class="link-list">
-                            <a href="#">BioRender</a> <a href="#">Midjourney</a> <a href="#">Paperpal</a>
-                        </div>
-                    </li>
+                    <li><div class="subcat-title">AI大模型</div><div class="link-list"><a href="https://chat.openai.com/" target="_blank">ChatGPT</a> <a href="https://www.deepseek.com/" target="_blank">DeepSeek</a> <a href="https://claude.ai/" target="_blank">Claude</a> <a href="https://gemini.google.com/" target="_blank">Gemini</a></div></li>
+                    <li><div class="subcat-title">生信专用AI</div><div class="link-list"><a href="https://alphafold.ebi.ac.uk/" target="_blank">AlphaFold</a> <a href="https://esmatlas.com/" target="_blank">ESMFold</a> <a href="https://github.com/dmis-lab/biobert" target="_blank">BioBERT</a> <a href="https://github.com/jerryji1993/DNABERT" target="_blank">DNABERT</a></div></li>
+                    <li><div class="subcat-title">AI辅助编程</div><div class="link-list"><a href="https://github.com/features/copilot" target="_blank">GitHub Copilot</a> <a href="https://cursor.com/" target="_blank">Cursor</a> <a href="https://codeium.com/" target="_blank">Codeium</a></div></li>
+                    <li><div class="subcat-title">AI文献工具</div><div class="link-list"><a href="https://elicit.com/" target="_blank">Elicit</a> <a href="https://scite.ai/" target="_blank">Scite</a> <a href="https://www.connectedpapers.com/" target="_blank">Connected Papers</a> <a href="https://www.researchrabbit.ai/" target="_blank">Research Rabbit</a></div></li>
+                    <li><div class="subcat-title">AI绘图/写作</div><div class="link-list"><a href="https://www.biorender.com/" target="_blank">BioRender</a> <a href="https://www.midjourney.com/" target="_blank">Midjourney</a> <a href="https://paperpal.com/" target="_blank">Paperpal</a></div></li>
                 </ul>
             </div>
-            
             <!-- 大类6：实用工具 -->
             <div class="catalog-card">
                 <div class="catalog-header">
@@ -609,170 +568,179 @@
                     <span class="toggle-icon">[+]</span>
                 </div>
                 <ul class="subcat-list">
-                    <li>
-                        <div class="subcat-title">格式转换</div>
-                        <div class="link-list">
-                            <a href="#">FASTQ</a> <a href="#">SAM/BAM</a> <a href="#">VCF</a> <a href="#">BED</a>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="subcat-title">序列处理</div>
-                        <div class="link-list">
-                            <a href="#">SeqKit</a> <a href="#">BioPython</a> <a href="#">EMBOSS</a>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="subcat-title">文献管理</div>
-                        <div class="link-list">
-                            <a href="#">Zotero</a> <a href="#">EndNote</a> <a href="#">Mendeley</a> <a href="#">Paperpile</a>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="subcat-title">统计软件</div>
-                        <div class="link-list">
-                            <a href="#">R/RStudio</a> <a href="#">Python/Jupyter</a> <a href="#">SPSS</a> <a href="#">GraphPad</a>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="subcat-title">写作/绘图</div>
-                        <div class="link-list">
-                            <a href="#">LaTeX/Overleaf</a> <a href="#">Inkscape</a> <a href="#">ImageJ</a>
-                        </div>
-                    </li>
+                    <li><div class="subcat-title">格式转换</div><div class="link-list"><a href="https://support.illumina.com/bulletins/2016/04/fastq-files-explained.html" target="_blank">FASTQ</a> <a href="https://samtools.github.io/hts-specs/" target="_blank">SAM/BAM</a> <a href="https://samtools.github.io/hts-specs/VCFv4.3.pdf" target="_blank">VCF</a> <a href="https://genome.ucsc.edu/FAQ/FAQformat.html#format1" target="_blank">BED</a></div></li>
+                    <li><div class="subcat-title">序列处理</div><div class="link-list"><a href="https://bioinf.shenwei.me/seqkit/" target="_blank">SeqKit</a> <a href="https://biopython.org/" target="_blank">BioPython</a> <a href="http://emboss.open-bio.org/" target="_blank">EMBOSS</a></div></li>
+                    <li><div class="subcat-title">文献管理</div><div class="link-list"><a href="https://www.zotero.org/" target="_blank">Zotero</a> <a href="https://endnote.com/" target="_blank">EndNote</a> <a href="https://www.mendeley.com/" target="_blank">Mendeley</a> <a href="https://paperpile.com/" target="_blank">Paperpile</a></div></li>
+                    <li><div class="subcat-title">统计软件</div><div class="link-list"><a href="https://posit.co/" target="_blank">R/RStudio</a> <a href="https://jupyter.org/" target="_blank">Python/Jupyter</a> <a href="https://www.ibm.com/products/spss-statistics" target="_blank">SPSS</a> <a href="https://www.graphpad.com/" target="_blank">GraphPad</a></div></li>
+                    <li><div class="subcat-title">写作/绘图</div><div class="link-list"><a href="https://www.overleaf.com/" target="_blank">LaTeX/Overleaf</a> <a href="https://inkscape.org/" target="_blank">Inkscape</a> <a href="https://imagej.net/" target="_blank">ImageJ</a></div></li>
                 </ul>
             </div>
         </div>
     </section>
-    
-    <!-- 知识库快速入口 -->
-    <section id="knowledge" style="margin-top: 20px;">
-        <h2 style="font-size: 1.8rem; margin-bottom: 20px; color: #1a1a2e;">📖 生信知识库 · 最新干货</h2>
-        <div class="knowledge-teaser">
-            <div class="teaser-item">
-                <span class="badge">入门必读</span>
-                <h4>单细胞UMAP图怎么看？</h4>
-                <p>手把手教你识别细胞亚群、判断分群质量</p>
-                <a href="#" style="color:#0f4c75; font-weight:500;">阅读 →</a>
+
+    <!-- 宣传条幅 (替代轮播图) -->
+    <div class="promo-banner" id="wechatPromo" onclick="qjyyj6('微信号: qjyyj6(示例)\n长按复制添加好友，领取免费生信资料包')">
+        <div class="promo-content">
+            <div class="promo-icon">📚</div>
+            <div class="promo-text">
+                <h3>🎁 添加微信 · 免费领生信学习资料包</h3>
+                <p>包含单细胞教程、R语言实战、Linux命令速查等精选资源</p>
             </div>
-            <div class="teaser-item">
-                <span class="badge">工具教程</span>
-                <h4>零代码做富集分析</h4>
-                <p>DAVID/Metascape完整教程</p>
-                <a href="#" style="color:#0f4c75; font-weight:500;">阅读 →</a>
+        </div>
+        <div class="promo-action">
+            <span>💬</span> 一键添加微信
+        </div>
+    </div>
+
+    <!-- 知识库 (二级类目 + 文章列表) -->
+    <section id="knowledge" class="knowledge-section">
+        <h2 style="font-size: 1.8rem; margin-bottom: 20px; color: #1a1a2e;">📖 生信知识库 · 文章精选</h2>
+        <div class="knowledge-categories">
+            <!-- 入门实战类 -->
+            <div class="knowledge-cat-card">
+                <div class="knowledge-cat-title">📘 入门实战</div>
+                <ul class="article-list">
+                    <li class="article-item">
+                        <span class="article-title">单细胞UMAP/t-SNE图怎么看？</span>
+                        <a href="https://mp.weixin.qq.com/s/toaDVyPPjmFjVckqj3J4dA" class="article-link">阅读 →</a>
+                    </li>
+                    <li class="article-item">
+                        <span class="article-title">零代码做富集分析 (DAVID/Metascape)</span>
+                        <a href="https://mp.weixin.qq.com/s/GDvK4f2Bj1F7b95kT6YZbQ" class="article-link">阅读 →</a>
+                    </li>
+                    <li class="article-item">
+                        <span class="article-title">Linux 基础命令：生信分析必会20条</span>
+                        <a href="https://mp.weixin.qq.com/s/W3jYkD__-CU27_lVCdhLyQ" class="article-link">阅读 →</a>
+                    </li>
+                </ul>
+                <div class="more-link"><a href="#">📁 更多入门文章 →</a></div>
             </div>
-            <div class="teaser-item">
-                <span class="badge">文献拆解</span>
-                <h4>Nature: 空间转录组揭示肿瘤边界</h4>
-                <p>拆解分析逻辑，看高分文章讲故事</p>
-                <a href="#" style="color:#0f4c75; font-weight:500;">阅读 →</a>
-            </div>
-            <div class="teaser-item">
-                <span class="badge">避坑指南</span>
-                <h4>单细胞送样5大致命错误</h4>
-                <p>细胞活性低、碎片多？附解决方案</p>
-                <a href="#" style="color:#0f4c75; font-weight:500;">阅读 →</a>
+            <!-- 进阶专题类 -->
+            <div class="knowledge-cat-card">
+                <div class="knowledge-cat-title">📙 进阶专题</div>
+                <ul class="article-list">
+                    <li class="article-item">
+                        <span class="article-title">Nature子刊：空间转录组揭示肿瘤边界</span>
+                        <a href="https://mp.weixin.qq.com/s/xEU7-D4u2-tduLBiqrDp5g" class="article-link">阅读 →</a>
+                    </li>
+                    <li class="article-item">
+                        <span class="article-title">单细胞测序数据整合与批次效应校正</span>
+                        <a href="https://mp.weixin.qq.com/s/PrwEEs8PS3ZaUyIWgJ_KSg" class="article-link">阅读 →</a>
+                    </li>
+                    <li class="article-item">
+                        <span class="article-title">三代测序全长转录本分析实战</span>
+                        <a href="https://mp.weixin.qq.com/s/j4nbKY2VbhZXHJ6BvY9S6g" class="article-link">阅读 →</a>
+                    </li>
+                </ul>
+                <div class="more-link"><a href="#">📁 更多进阶专题 →</a></div>
             </div>
         </div>
     </section>
-    
-    <!-- 核心服务专区 -->
+
+    <!-- 核心服务 -->
     <section id="service" class="service-section">
-        <h2 style="font-size: 1.8rem; text-align:center; margin-bottom:10px;">⚡ 核心服务 · 一站式科研加速</h2>
-        <p style="text-align: center; color: #666; margin-bottom: 30px;">直接对接 · 无中间商 · 从检测到分析到文章</p>
+        <h2 style="font-size:1.8rem; text-align:center;">⚡ 核心服务 · 一站式科研加速</h2>
+        <p style="text-align:center; color:#666; margin-bottom:30px;">直接对接 · 无中间商</p>
         <div class="service-grid">
-            <div class="service-item">
-                <div class="icon">🧬</div>
-                <h4>高通量测序<br>+ 全外显子</h4>
-                <p style="font-size:0.9rem; color:#666;">遗传病/肿瘤突变筛查</p>
-                <a href="#contact" class="btn">咨询 →</a>
-            </div>
-            <div class="service-item">
-                <div class="icon">🔬</div>
-                <h4>单细胞测序</h4>
-                <p style="font-size:0.9rem; color:#666;">10x Genomics · 交互式报告</p>
-                <a href="#contact" class="btn">咨询 →</a>
-            </div>
-            <div class="service-item">
-                <div class="icon">📏</div>
-                <h4>单分子测序</h4>
-                <p style="font-size:0.9rem; color:#666;">PacBio/Nanopore · 全长转录本</p>
-                <a href="#contact" class="btn">咨询 →</a>
-            </div>
-            <div class="service-item">
-                <div class="icon">📊</div>
-                <h4>生信数据分析</h4>
-                <p style="font-size:0.9rem; color:#666;">二次挖掘 · 高级可视化</p>
-                <a href="#contact" class="btn">咨询 →</a>
-            </div>
-            <div class="service-item">
-                <div class="icon">✍️</div>
-                <h4>课题设计+润色</h4>
-                <p style="font-size:0.9rem; color:#666;">实验框架 · SCI论文</p>
-                <a href="#contact" class="btn">咨询 →</a>
-            </div>
+            <div class="service-item"><div class="icon">🧬</div><h4>高通量测序<br>+全外显子</h4><a href="#contact" class="btn">咨询 →</a></div>
+            <div class="service-item"><div class="icon">🔬</div><h4>单细胞测序</h4><a href="#contact" class="btn">咨询 →</a></div>
+            <div class="service-item"><div class="icon">📏</div><h4>单分子测序</h4><a href="#contact" class="btn">咨询 →</a></div>
+            <div class="service-item"><div class="icon">📊</div><h4>生信数据分析</h4><a href="#contact" class="btn">咨询 →</a></div>
+            <div class="service-item"><div class="icon">✍️</div><h4>课题设计+润色</h4><a href="#contact" class="btn">咨询 →</a></div>
         </div>
     </section>
-    
-    <!-- 转化表单 -->
+
+    <!-- 表单 (含其他选项) -->
     <section id="contact" class="contact-form">
-        <h3 style="font-size: 1.6rem; margin-bottom: 24px;">📋 获取专属方案与报价</h3>
-        <form action="#" method="post">
+        <h3 style="font-size:1.6rem; margin-bottom:24px;">📋 获取专属方案与报价</h3>
+        <form action="https://formspree.io/f/你的表单ID" method="POST">
             <div class="form-grid">
-                <input type="text" placeholder="姓名/称呼 *" required>
-                <input type="text" placeholder="单位/课题组">
-                <input type="tel" placeholder="联系电话 *" required>
-                <input type="email" placeholder="邮箱/微信 *" required>
-                <select class="full-width">
-                    <option>选择您最感兴趣的服务</option>
+                <input type="text" name="name" placeholder="姓名/称呼 *" required>
+                <input type="text" name="institution" placeholder="单位/课题组">
+                <input type="tel" name="phone" placeholder="联系电话 *" required>
+                <input type="email" name="email" placeholder="邮箱/微信 *" required>
+                <select name="service_interest" class="full-width" required>
+                    <option value="">选择您最感兴趣的服务 *</option>
                     <option>单细胞测序</option>
                     <option>全外显子/高通量测序</option>
                     <option>单分子测序</option>
                     <option>生信数据分析</option>
                     <option>课题设计/文章润色</option>
+                    <option>其他</option>
                 </select>
-                <textarea class="full-width" placeholder="简要描述您的项目或科学问题……" rows="3"></textarea>
+                <textarea name="message" class="full-width" placeholder="简要描述您的项目或科学问题……" rows="3"></textarea>
             </div>
             <button type="submit" class="submit-btn">🚀 提交 · 24小时内回复</button>
-            <p style="font-size:0.8rem; text-align:center; margin-top:16px; color:#888;">信息仅用于服务对接，严格保密</p>
+            <p class="form-note">信息仅用于服务对接，严格保密。提交后我们会通过邮件与您联系。</p>
         </form>
+        <p style="font-size:0.9rem; margin-top:12px; background:#f8fbfe; padding:8px 16px; border-radius:40px;">
+            💡 提示：表单使用 Formspree，请替换 action 地址。
+        </p>
     </section>
-    
+
+    <!-- 页脚 + 二维码 -->
     <footer class="footer">
+        <div class="qrcode-section">
+            <div class="qrcode-item">
+                <div class="qrcode-placeholder">
+                    <span>公众号二维码<br>(替换图片)</span>
+                </div>
+                <p>📱 关注公众号</p>
+                <span style="font-size:0.8rem;">生信加速器</span>
+            </div>
+            <div class="qrcode-item">
+                <div class="qrcode-placeholder">
+                    <span>个人微信二维码<br>(替换图片)</span>
+                </div>
+                <p>💬 微信咨询</p>
+                <span style="font-size:0.8rem;">bioinfo_helper</span>
+            </div>
+        </div>
         <p>© 2026 生信加速器 · 资源导航+科研服务<br>
-        资源来源于公开网络，仅供学习交流。检测与分析服务为直销模式，直接对接技术团队。<br>
+        资源链接来自公开网络，仅供学习交流。检测与分析为直销模式。<br>
         <a href="#">关于我们</a> · <a href="#">资源更新日志</a> · <a href="#">合作联系</a></p>
     </footer>
 </div>
 
-<!-- 简单的折叠展开脚本 -->
 <script>
     (function() {
-        // 获取所有卡片头部
+        // ---------- 平滑折叠展开 (优化) ----------
         const headers = document.querySelectorAll('.catalog-header');
         headers.forEach(header => {
-            header.addEventListener('click', function(e) {
-                // 找到同级的 subcat-list
+            header.addEventListener('click', function() {
                 const card = this.closest('.catalog-card');
                 const list = card.querySelector('.subcat-list');
                 const icon = this.querySelector('.toggle-icon');
+                if (!list) return;
                 
-                if (list) {
-                    // 切换 active 类
-                    list.classList.toggle('active');
-                    // 改变图标
-                    if (list.classList.contains('active')) {
-                        icon.textContent = '[-]';
-                    } else {
-                        icon.textContent = '[+]';
-                    }
+                if (list.classList.contains('active')) {
+                    list.classList.remove('active');
+                    icon.textContent = '[+]';
+                } else {
+                    list.classList.add('active');
+                    icon.textContent = '[-]';
                 }
             });
         });
-        
-        // 可选：默认展开第一个大类作为示例，如果需要可取消注释
-        // document.querySelector('.catalog-card .catalog-header').click();
+
+        // ---------- 宣传条幅点击 (可替换为真实微信号复制) ----------
+        const promo = document.getElementById('wechatPromo');
+        if (promo) {
+            promo.addEventListener('click', function() {
+                // 你可以改成复制微信号逻辑，此处仅示例
+                alert('📱 微信号：qjyyj6\n长按复制，添加好友即可领取资料包。');
+            });
+        }
+
+        // 表单提醒 (防止误提交空action)
+        const form = document.querySelector('.contact-form form');
+        form.addEventListener('submit', (e) => {
+            if (form.action.includes('你的表单ID')) {
+                e.preventDefault();
+                alert('请先将表单action替换为你的Formspree端点。\n注册 https://formspree.io 免费获取。');
+            }
+        });
     })();
 </script>
-
 </body>
 </html>
